@@ -1,19 +1,20 @@
 import { Schema, model } from "mongoose";
 import type { Types, Document, PopulatedDoc } from "mongoose";
 import { InterfaceLevel } from "./level.model";
+import InterfaceUser from "./user.model";
 
 export interface InterfaceAssignment {
   _id: Types.ObjectId;
   name: string;
   description: string;
   image: string;
-  // submitted: [
-  //   {
-  //     user: PopulatedDoc<InterfaceUser & Document>;
-  //     projectURL: string;
-  //     verified: boolean;
-  //   }
-  // ];
+  submitted: [
+    {
+      user: PopulatedDoc<InterfaceUser & Document>;
+      projectURL: string;
+      verified: boolean;
+    },
+  ];
   levelId: PopulatedDoc<InterfaceLevel & Document>;
 }
 
@@ -31,24 +32,24 @@ const assignmentSchema = new Schema({
   },
   image: {
     type: String,
-    //required: true,
+    required: true,
   },
-  //   submitted: [
-  //     {
-  //       user: {
-  //         type: Schema.Types.ObjectId,
-  //         ref: "User",
-  //       },
-  //       projectURL: {
-  //         type: String,
-  //         required: true,
-  //       },
-  //       verified: {
-  //         type: Boolean,
-  //         default: false
-  //       }
-  //     }
-  //   ],
+  submitted: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+      projectURL: {
+        type: String,
+        required: true,
+      },
+      verified: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   levelId: {
     type: Schema.Types.ObjectId,
     ref: "Level",
