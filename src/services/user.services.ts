@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "../config/index";
-import { signInRequest } from "../typeDefs/app-request";
 
 const createUser = async (
   data: InterfaceUser,

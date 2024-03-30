@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { Types, Document, PopulatedDoc } from "mongoose";
 import InterfaceUser from "./user.model";
-
 export interface InterfaceWing {
   _id: Types.ObjectId;
   name: string;
@@ -19,6 +18,7 @@ const wingSchema = new Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     description: {
       type: String,
