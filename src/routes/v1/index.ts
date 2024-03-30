@@ -12,6 +12,6 @@ router.use("/users", userRoutes);
 router.use("/feeds", feedRoutes);
 router.use("/wings", wingRoutes);
 router.use("/announcements", announcementRoutes);
-router.use("/assignment", assignmentRoutes);
+router.use("/assignments", assignmentRoutes);
 
 export default router;
