@@ -20,6 +20,16 @@ const getAssignmentById = async (id: string) => {
   }
 };
 
+const getAllAssignments = async () => {
+  try {
+    const response = await Assignment.find({}).lean().exec();
+    return response;
+  } catch (error: unknown) {
+    console.log("There is Error in Assignment - Repository Layer");
+    throw error;
+  }
+};
+
 const updateAssignment = async (id: string, data: any) => {
   try {
     const response = await Assignment.findByIdAndUpdate(id, data, { new: true })
@@ -47,4 +57,5 @@ export default {
   getAssignmentById,
   updateAssignment,
   deleteAssignment,
+  getAllAssignments,
 };
