@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "../config/index";
+import { generateOTP } from "../utils/otp-worker";
 
 const createUser = async (
   data: InterfaceUser,
@@ -112,6 +113,22 @@ const checkPassword = (
     return bcrypt.compare(plainPassword, hashedPassword);
   } catch (error) {
     console.log("There is Error in checking hashed password - Service Layer");
+    throw error;
+  }
+};
+
+const forgetPassword = async (email: string): Promise<string | null> => {
+  try {
+    const user = await userRepository.getUserByEmail(email);
+    if (!user) {
+      console.log("User not found"); // Debugging
+      throw new Error("User not found");
+    }
+
+    const token = createToken(user);
+    return token;
+  } catch (error: unknown) {
+    console.log("There is Error in Services Layer"); // Debugging
     throw error;
   }
 };
