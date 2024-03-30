@@ -3,6 +3,7 @@ import InterfaceUser from "../models/user.model";
 import InterfaceFeed from "../models/feed.model";
 import InterfaceAnnoucement from "../models/annoucement.model";
 import InterfaceAssignment from "../models/assignment.model";
+import InterfaceProject from "../models/project.model";
 import { InterfaceWing } from "../models/wings.model";
 
 export interface createUserRequest extends Request {
@@ -30,4 +31,8 @@ export interface createAssignmentRequest extends Request {
 
 export interface createWingRequest extends Request {
   body: InterfaceWing;
+}
+
+export interface createProjectRequest extends Request {
+  body: InterfaceProject;
 }
