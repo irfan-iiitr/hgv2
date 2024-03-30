@@ -30,7 +30,7 @@ const updateFeed = async (
       .exec();
     return response;
   } catch (error: unknown) {
-    console.log("There is Error in Feed - Repository Layer");
+    console.log("There is Error in Feed - Repository Layer", error);
     throw error;
   }
 };
