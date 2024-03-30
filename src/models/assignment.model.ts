@@ -3,7 +3,7 @@ import type { Types, Document, PopulatedDoc } from "mongoose";
 import { InterfaceLevel } from "./level.model";
 import InterfaceUser from "./user.model";
 
-export interface InterfaceAssignment {
+export default interface InterfaceAssignment {
   _id: Types.ObjectId;
   name: string;
   description: string;
