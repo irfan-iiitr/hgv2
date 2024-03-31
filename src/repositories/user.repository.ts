@@ -1,4 +1,5 @@
 import InterfaceUser, { User } from "../models/user.model";
+import { Types } from "mongoose";
 
 const createUser = async (
   data: InterfaceUser,
@@ -27,8 +28,8 @@ const getUserById = async (id: string): Promise<InterfaceUser | null> => {
 };
 
 const updateUser = async (
-  id: string,
-  data: InterfaceUser,
+  id: string | Types.ObjectId,
+  data: Partial<InterfaceUser>,
 ): Promise<InterfaceUser | null> => {
   try {
     const response = await User.findByIdAndUpdate(id, data, {

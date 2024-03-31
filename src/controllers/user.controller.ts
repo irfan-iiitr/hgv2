@@ -45,4 +45,46 @@ const signIn = async (req: signInRequest, res: Response) => {
   }
 };
 
-export { createUser, signIn };
+const forgetPassword = async (req: Request, res: Response) => {
+  try {
+    const response = await userServices.forgetPassword(req.body.email);
+    return res.status(200).json({
+      data: response,
+      message: "OTP sent successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      data: {},
+      message: error.message || "Failed to send OTP",
+      success: false,
+      err: error,
+    });
+  }
+};
+
+const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const response = await userServices.resetPassword(
+      req.body.email,
+      req.body.otp,
+      req.body.password,
+    );
+    return res.status(200).json({
+      data: response,
+      message: "Password reset successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      data: {},
+      message: error.message || "Failed to reset password",
+      success: false,
+      err: error,
+    });
+  }
+};
+
+export { createUser, signIn, forgetPassword, resetPassword };

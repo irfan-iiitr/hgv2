@@ -4,7 +4,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "../config/index";
-import { generateOTP } from "../utils/otp-worker";
+import { generateOTP, verifyOTP } from "../utils/otp-worker";
+import { Types } from "mongoose";
 
 const createUser = async (
   data: InterfaceUser,
@@ -51,8 +52,8 @@ const getUserById = async (id: string): Promise<InterfaceUser | null> => {
 };
 
 const updateUser = async (
-  id: string,
-  data: InterfaceUser,
+  id: string | Types.ObjectId,
+  data: Partial<InterfaceUser>,
 ): Promise<InterfaceUser | null> => {
   try {
     const response = await userRepository.updateUser(id, data);
@@ -117,7 +118,7 @@ const checkPassword = (
   }
 };
 
-const forgetPassword = async (email: string): Promise<string | null> => {
+const forgetPassword = async (email: string): Promise<boolean | null> => {
   try {
     const user = await userRepository.getUserByEmail(email);
     if (!user) {
@@ -125,8 +126,48 @@ const forgetPassword = async (email: string): Promise<string | null> => {
       throw new Error("User not found");
     }
 
-    const token = createToken(user);
-    return token;
+    const otp = generateOTP(email);
+
+    return otp;
+  } catch (error: unknown) {
+    console.log("There is Error in Services Layer"); // Debugging
+    throw error;
+  }
+};
+
+const resetPassword = async (
+  email: string,
+  otp: number,
+  password: string,
+): Promise<boolean | null> => {
+  try {
+    const user = await userRepository.getUserByEmail(email);
+    if (!user) {
+      console.log("User not found"); // Debugging
+      throw new Error("User not found");
+    }
+
+    const response = await verifyOTP(email, otp);
+
+    if (!response) {
+      console.log("OTP not verified"); // Debugging
+      throw new Error("OTP not verified");
+    }
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+
+    const updatedUser = await userRepository.updateUser(user._id, {
+      ...user,
+      password: hashedPassword,
+    });
+
+    if (!updatedUser) {
+      console.log("Password not updated"); // Debugging
+      throw new Error("Password not updated");
+    }
+
+    return response;
   } catch (error: unknown) {
     console.log("There is Error in Services Layer"); // Debugging
     throw error;
@@ -140,4 +181,6 @@ export default {
   deleteUser,
   getAllUsers,
   signIn,
+  resetPassword,
+  forgetPassword,
 };
