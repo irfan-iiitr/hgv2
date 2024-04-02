@@ -112,4 +112,53 @@ const getAllWings = async (req: Request, res: Response) => {
   }
 };
 
-export { createWing, getWing, updateWing, deleteWing, getAllWings };
+const addCordinator = async (req: Request, res: Response) => {
+  try {
+    const response = await wingServices.addCordinator(req.params.id, req.body);
+    return res.status(200).json({
+      data: response,
+      message: "Coordinator added successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      data: {},
+      message: error?.message || "Failed to add Coordinator",
+      success: false,
+      err: error,
+    });
+  }
+};
+
+const updateCordinator = async (req: Request, res: Response) => {
+  try {
+    const response = await wingServices.updateCordinators(
+      req.params.id,
+      req.body,
+    );
+    return res.status(200).json({
+      data: response,
+      message: "Coordinator updated successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      data: {},
+      message: error?.message || "Failed to update Coordinator",
+      success: false,
+      err: error,
+    });
+  }
+};
+
+export {
+  createWing,
+  getWing,
+  updateWing,
+  deleteWing,
+  getAllWings,
+  addCordinator,
+  updateCordinator,
+};
