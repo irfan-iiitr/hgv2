@@ -1,12 +1,12 @@
 import express from "express";
 
 import {
-  addCordinator,
+  addCoordinator,
   createWing,
   deleteWing,
   getAllWings,
   getWing,
-  updateCordinator,
+  deleteCoordinator,
   updateWing,
 } from "../../controllers/wing.controller";
 
@@ -18,6 +18,6 @@ router.get("/", getAllWings);
 router.get("/:id", getWing);
 router.delete("/:id", deleteWing);
 router.patch("/:id", updateWing);
-router.patch("/addCoordinator/:id", addCordinator);
-router.patch("/replaceCoordinator/:id", updateCordinator);
+router.patch("/addCoordinator/:id", addCoordinator);
+router.delete("/deleteCoordinator/:id", deleteCoordinator);
 export default router;

@@ -51,7 +51,7 @@ const getAllWings = async () => {
     throw error;
   }
 };
-const addCordinator = async (id: string, data: { id: ObjectId }) => {
+const addCoordinator = async (id: string, data: { id: ObjectId }) => {
   try {
     const wing = await wingsRepository.getWingById(id);
     if (!wing) {
@@ -67,24 +67,18 @@ const addCordinator = async (id: string, data: { id: ObjectId }) => {
   }
 };
 
-const updateCordinators = async (
-  id: string,
-  data: { oldId: string; newId: string },
-) => {
+const deleteCoordinator = async (wingId: string, data: { userId: string }) => {
   try {
-    const wing = await wingsRepository.getWingById(id);
+    const wing = await wingsRepository.getWingById(wingId);
     if (!wing) {
       throw new Error("Wing not found");
     }
-    const coordinators = [...wing.coordinators];
-    const index = coordinators.findIndex(
-      (coordinatorId) => coordinatorId.toString() === data.oldId,
+    let coordinators = [...wing.coordinators];
+    coordinators = coordinators.filter(
+      (coordinator) => coordinator.toString() !== data.userId,
     );
-    if (index !== -1) {
-      coordinators[index] = new ObjectId(data.newId);
-    } else throw new Error("Coordinator not found");
     const updatedData = { ...wing, coordinators: coordinators };
-    return await updateWing(id, updatedData);
+    return await updateWing(wingId, updatedData);
   } catch (error) {
     console.log("There is error in Wing - Service layer");
     throw error;
@@ -97,6 +91,6 @@ export default {
   updateWing,
   deleteWing,
   getAllWings,
-  addCordinator,
-  updateCordinators,
+  addCoordinator,
+  deleteCoordinator,
 };
