@@ -51,16 +51,16 @@ const getAllWings = async () => {
     throw error;
   }
 };
-const addCoordinator = async (id: string, data: { id: ObjectId }) => {
+const addCoordinator = async (wingId: string, data: { userId: string }) => {
   try {
-    const wing = await wingsRepository.getWingById(id);
-    if (!wing) {
+    const updatedWing = await wingsRepository.updateWing(wingId, {
+      $push: { coordinators: data.userId },
+    });
+    if (!updatedWing) {
       throw new Error("Wing not found");
     }
-    let coordinators = [...wing.coordinators];
-    coordinators.push(data.id);
-    const updatedData = { ...wing, coordinators: coordinators };
-    return await updateWing(id, updatedData);
+
+    return updatedWing;
   } catch (error) {
     console.log("There is error in Wing - Service layer");
     throw error;
@@ -69,16 +69,15 @@ const addCoordinator = async (id: string, data: { id: ObjectId }) => {
 
 const deleteCoordinator = async (wingId: string, data: { userId: string }) => {
   try {
-    const wing = await wingsRepository.getWingById(wingId);
-    if (!wing) {
-      throw new Error("Wing not found");
+    const updatedWing = await wingsRepository.updateWing(wingId, {
+      $pull: { coordinators: data.userId },
+    });
+
+    if (!updatedWing) {
+      throw new Error("Wing not found or update failed");
     }
-    let coordinators = [...wing.coordinators];
-    coordinators = coordinators.filter(
-      (coordinator) => coordinator.toString() !== data.userId,
-    );
-    const updatedData = { ...wing, coordinators: coordinators };
-    return await updateWing(wingId, updatedData);
+
+    return updatedWing;
   } catch (error) {
     console.log("There is error in Wing - Service layer");
     throw error;
