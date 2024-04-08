@@ -56,10 +56,23 @@ const getAllLevels = async (): Promise<InterfaceLevel[] | null> => {
   }
 };
 
+const getAllLevelsByWingId = async (
+  wingId: string,
+): Promise<InterfaceLevel[]> => {
+  try {
+    const levels = await levelRepository.getAllLevelsByWingId(wingId);
+    return levels;
+  } catch (error) {
+    console.log("There is Error in Level - Services Layer", error);
+    throw error;
+  }
+};
+
 export default {
   createLevel,
   getLevelById,
   updateLevel,
   deleteLevel,
   getAllLevels,
+  getAllLevelsByWingId,
 };

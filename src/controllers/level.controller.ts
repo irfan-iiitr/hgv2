@@ -92,4 +92,29 @@ const getAllLevels = async (req: Request, res: Response) => {
   }
 };
 
-export { createLevel, getLevelById, updateLevel, deleteLevel, getAllLevels };
+const getAllLevelsByWingId = async (req: Request, res: Response) => {
+  try {
+    const levels = await levelServices.getAllLevelsByWingId(req.params.id);
+    return res.status(200).json({
+      data: levels,
+      message: "All Levels Retrieved Successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      message: error.message || "Failed to retrieve Levels",
+      success: false,
+      err: { error },
+    });
+  }
+};
+
+export {
+  createLevel,
+  getLevelById,
+  updateLevel,
+  deleteLevel,
+  getAllLevels,
+  getAllLevelsByWingId,
+};

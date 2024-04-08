@@ -58,10 +58,23 @@ const getAllLevels = async (): Promise<InterfaceLevel[] | null> => {
   }
 };
 
+const getAllLevelsByWingId = async (
+  wingId: string,
+): Promise<InterfaceLevel[]> => {
+  try {
+    const levels = await Level.find({ wingId: wingId });
+    return levels;
+  } catch (error) {
+    console.error("There was an error fetching the levels by wingId", error);
+    throw error;
+  }
+};
+
 export default {
   getLevelById,
   updateLevel,
   deleteLevel,
   getAllLevels,
   createLevel,
+  getAllLevelsByWingId,
 };
