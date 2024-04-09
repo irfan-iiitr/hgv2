@@ -58,10 +58,23 @@ const getAllTopics = async (): Promise<InterfaceTopic[] | null> => {
   }
 };
 
+const getTopicsByLevelId = async (
+  levelId: string,
+): Promise<InterfaceTopic[] | null> => {
+  try {
+    const response = await Topic.find({ levelId: levelId }).lean().exec();
+    return response;
+  } catch (error) {
+    console.log("There is Error in Topic - Repository Layer", error);
+    throw error;
+  }
+};
+
 export default {
   createTopic,
   getTopicById,
   updateTopic,
   deleteTopic,
   getAllTopics,
+  getTopicsByLevelId,
 };

@@ -92,4 +92,29 @@ const getAllTopic = async (req: Request, res: Response) => {
   }
 };
 
-export { createTopic, getTopicsById, updateTopic, deleteTopic, getAllTopic };
+const getTopicsByLevelId = async (req: Request, res: Response) => {
+  try {
+    const topics = await topicsServices.getTopicsByLevelId(req.params.levelId);
+    return res.status(200).json({
+      data: topics,
+      message: "Topics Retrieved Successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      message: error.message || "Failed to retrieve Topics",
+      success: false,
+      err: { error },
+    });
+  }
+};
+
+export {
+  createTopic,
+  getTopicsById,
+  updateTopic,
+  deleteTopic,
+  getAllTopic,
+  getTopicsByLevelId,
+};
