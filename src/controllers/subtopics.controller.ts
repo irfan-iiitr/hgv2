@@ -95,10 +95,31 @@ const getAllSubtopics = async (req: Request, res: Response) => {
   }
 };
 
+const getSubtopicsByTopicId = async (req: Request, res: Response) => {
+  try {
+    const subtopics = await subtopicsServices.getSubtopicsByTopicId(
+      req.params.topicId,
+    );
+    return res.status(200).json({
+      data: subtopics,
+      message: "Subtopics Retrieved Successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      message: error.message || "Failed to retrieve Subtopics",
+      success: false,
+      err: { error },
+    });
+  }
+};
+
 export {
   createSubtopic,
   getSubtopicById,
   updateSubtopic,
   deleteSubtopic,
   getAllSubtopics,
+  getSubtopicsByTopicId,
 };

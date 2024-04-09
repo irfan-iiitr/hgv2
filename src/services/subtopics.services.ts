@@ -60,10 +60,23 @@ const getAllSubtopics = async (): Promise<InterfaceSubtopic[] | null> => {
   }
 };
 
+const getSubtopicsByTopicId = async (
+  topicId: string,
+): Promise<InterfaceSubtopic[] | null> => {
+  try {
+    const response = await subtopicsRepository.getSubtopicsByTopicId(topicId);
+    return response;
+  } catch (error) {
+    console.log("There is an error in getSubtopicsByTopicId - Services Layer");
+    throw error;
+  }
+};
+
 export default {
   createSubtopic,
   getSubtopicById,
   updateSubtopic,
   deleteSubtopic,
   getAllSubtopics,
+  getSubtopicsByTopicId,
 };
