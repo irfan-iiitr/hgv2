@@ -109,10 +109,31 @@ const deleteAssignment = async (req: Request, res: Response) => {
   }
 };
 
+const getAllAssignmentsByLevelId = async (req: Request, res: Response) => {
+  try {
+    const assignment = await assignmentServices.getAllAssignmentsByLevelId(
+      req.params.levelId,
+    );
+    return res.status(200).json({
+      data: assignment,
+      message: "All Assignments Retrieved Successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      message: error.message || "Failed to retrieve Assignments",
+      success: false,
+      err: { error },
+    });
+  }
+};
+
 export {
   createAssignment,
   getAssignmentById,
   updateAssignment,
   deleteAssignment,
   getAllAssignments,
+  getAllAssignmentsByLevelId,
 };

@@ -1,3 +1,4 @@
+import { level } from "winston";
 import { Assignment } from "../models/assignment.model";
 
 const createAssignment = async (data: any) => {
@@ -52,10 +53,21 @@ const deleteAssignment = async (id: string) => {
   }
 };
 
+const getAllAssignmentsByLevelId = async (levelId: string) => {
+  try {
+    const response = await Assignment.find({ levelId }).lean().exec();
+    return response;
+  } catch (error) {
+    console.log("There is Error in Assignment - Repository Layer");
+    throw error;
+  }
+};
+
 export default {
   createAssignment,
   getAssignmentById,
   updateAssignment,
   deleteAssignment,
   getAllAssignments,
+  getAllAssignmentsByLevelId,
 };

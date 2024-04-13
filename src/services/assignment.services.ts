@@ -60,10 +60,26 @@ const deleteAssignment = async (
   }
 };
 
+const getAllAssignmentsByLevelId = async (
+  levelId: string,
+): Promise<InterfaceAssignment[] | null> => {
+  try {
+    const response =
+      await assignmentRepository.getAllAssignmentsByLevelId(levelId);
+    return response;
+  } catch (error: unknown) {
+    console.log(
+      "There is Error in getting Assignment by LevelId - Services Layer",
+    );
+    throw error;
+  }
+};
+
 export default {
   createAssignment,
   getAssignmentById,
   updateAssignment,
   deleteAssignment,
   getAllAssignments,
+  getAllAssignmentsByLevelId,
 };
