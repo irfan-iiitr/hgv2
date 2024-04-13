@@ -1,11 +1,17 @@
 import assignmentRepository from "../repositories/assignment.repository";
 import InterfaceAssignment from "../models/assignment.model";
+import { ObjectId } from "mongodb";
+import { levelRepository } from "../repositories";
 
 const createAssignment = async (
   data: InterfaceAssignment,
 ): Promise<InterfaceAssignment | null> => {
   try {
     const response = await assignmentRepository.createAssignment(data);
+    // Update the Level document to include the new assignment
+    await levelRepository.updateLevel(data.levelId, {
+      $push: { assignments: new ObjectId(response._id) },
+    });
     return response;
   } catch (error) {
     console.log("There is Error in Assignment - Services Layer");
@@ -53,6 +59,7 @@ const deleteAssignment = async (
 ): Promise<InterfaceAssignment | null> => {
   try {
     const response = await assignmentRepository.deleteAssignment(id);
+
     return response;
   } catch (error: unknown) {
     console.log("There is Error in deleting Assignment - Services Layer");
@@ -75,6 +82,33 @@ const getAllAssignmentsByLevelId = async (
   }
 };
 
+const submitAssignment = async (
+  id: string,
+  userId: string,
+  projectURL: string,
+): Promise<InterfaceAssignment | null> => {
+  try {
+    const updatedAssignment = await assignmentRepository.updateAssignment(id, {
+      $push: {
+        submitted: {
+          user: new ObjectId(userId),
+          projectURL: projectURL,
+          verified: false,
+        },
+      },
+    });
+
+    if (!updatedAssignment) {
+      throw new Error("Assignment not found or update failed");
+    }
+
+    return updatedAssignment;
+  } catch (error: unknown) {
+    console.log("There is Error in submitting Assignment - Services Layer");
+    throw error;
+  }
+};
+
 export default {
   createAssignment,
   getAssignmentById,
@@ -82,4 +116,5 @@ export default {
   deleteAssignment,
   getAllAssignments,
   getAllAssignmentsByLevelId,
+  submitAssignment,
 };

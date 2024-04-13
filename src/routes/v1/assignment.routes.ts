@@ -7,6 +7,7 @@ import {
   updateAssignment,
   getAllAssignments,
   getAllAssignmentsByLevelId,
+  submitAssignment,
 } from "../../controllers/assignment.controller";
 import { checkAdmin } from "../../middlewares/auth.middleware";
 import { upload } from "../../config/multer.config";
@@ -19,5 +20,6 @@ router.get("/", getAllAssignments);
 router.get("/level/:levelId", getAllAssignmentsByLevelId);
 router.delete("/:id", checkAdmin, deleteAssignment);
 router.patch("/:id", checkAdmin, updateAssignment);
+router.patch("/submit/:id", submitAssignment);
 
 export default router;

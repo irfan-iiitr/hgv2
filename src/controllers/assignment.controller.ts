@@ -129,6 +129,28 @@ const getAllAssignmentsByLevelId = async (req: Request, res: Response) => {
   }
 };
 
+const submitAssignment = async (req: Request, res: Response) => {
+  try {
+    const assignment = await assignmentServices.submitAssignment(
+      req.params.id,
+      req.body.userId,
+      req.body.projectURL,
+    );
+    return res.status(200).json({
+      data: assignment,
+      message: "Assignment Submitted Successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      message: error.message || "Failed to submit Assignment",
+      success: false,
+      err: { error },
+    });
+  }
+};
+
 export {
   createAssignment,
   getAssignmentById,
@@ -136,4 +158,5 @@ export {
   deleteAssignment,
   getAllAssignments,
   getAllAssignmentsByLevelId,
+  submitAssignment,
 };
