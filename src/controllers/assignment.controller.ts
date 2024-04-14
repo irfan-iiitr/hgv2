@@ -151,6 +151,27 @@ const submitAssignment = async (req: Request, res: Response) => {
   }
 };
 
+const verifyAssignment = async (req: Request, res: Response) => {
+  try {
+    const assignment = await assignmentServices.verifyAssignment(
+      req.params.id,
+      req.body.projectURL,
+    );
+    return res.status(200).json({
+      data: assignment,
+      message: "Assignment Verified Successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error: any) {
+    return res.status(501).json({
+      message: error.message || "Failed to verify Assignment",
+      success: false,
+      err: { error },
+    });
+  }
+};
+
 export {
   createAssignment,
   getAssignmentById,
@@ -159,4 +180,5 @@ export {
   getAllAssignments,
   getAllAssignmentsByLevelId,
   submitAssignment,
+  verifyAssignment,
 };

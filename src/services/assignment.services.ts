@@ -109,6 +109,40 @@ const submitAssignment = async (
   }
 };
 
+const verifyAssignment = async (
+  id: string,
+  projectURL: string,
+): Promise<InterfaceAssignment | null> => {
+  try {
+    const assignment = await assignmentRepository.getAssignmentById(id);
+    if (!assignment) {
+      throw new Error("Assignment not found");
+    }
+    // Find the index of the submission
+    const index = assignment.submitted.findIndex(
+      (submission) => submission.projectURL === projectURL,
+    );
+
+    if (index === -1) {
+      throw new Error("Submission not found");
+    }
+
+    // Update the 'verified' field of the submission
+    const updatedAssignment = await assignmentRepository.updateAssignment(id, {
+      $set: { [`submitted.${index}.verified`]: true },
+    });
+
+    if (!updatedAssignment) {
+      throw new Error("Assignment not found or update failed");
+    }
+
+    return updatedAssignment;
+  } catch (error: unknown) {
+    console.log("There is Error in verifying Assignment - Services Layer");
+    throw error;
+  }
+};
+
 export default {
   createAssignment,
   getAssignmentById,
@@ -117,4 +151,5 @@ export default {
   getAllAssignments,
   getAllAssignmentsByLevelId,
   submitAssignment,
+  verifyAssignment,
 };
